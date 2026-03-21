@@ -1,0 +1,162 @@
+<h2>Live Match Screen — Layout</h2>
+<p class="subtitle">This is the screen you'll use on the sideline during a game. Which layout feels right?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>List view</h3>
+      <p>Players grouped into "On Pitch" and "Bench" lists. Tap a player to sub them. Fast and readable in any light.</p>
+      <div style="display:flex;justify-content:center;margin-top:12px">
+        <div style="width:200px;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;font-size:11px">
+          <!-- Timer bar -->
+          <div style="background:#0A0F1E;color:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;opacity:0.7">1ST HALF</span>
+            <span style="font-size:18px;font-weight:700;letter-spacing:1px">23:41</span>
+            <span style="background:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px">▶</span>
+          </div>
+          <!-- Score -->
+          <div style="background:#1e293b;color:white;padding:4px;text-align:center;font-size:12px;font-weight:600">
+            Our Team 1 — 0 Opponent
+          </div>
+          <!-- On pitch -->
+          <div style="padding:6px 10px">
+            <div style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">On Pitch · 8</div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9">
+              <span style="color:#0A0F1E;font-weight:500">1 · Liam</span><span style="color:#64748b">GK · 23m</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9">
+              <span style="color:#0A0F1E;font-weight:500">4 · Emma</span><span style="color:#64748b">CB · 23m</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9">
+              <span style="color:#0A0F1E;font-weight:500">7 · Noah</span><span style="color:#64748b">LW · 23m</span>
+            </div>
+            <div style="text-align:center;padding:3px;color:#94a3b8;font-size:9px">+ 5 more</div>
+          </div>
+          <!-- Bench -->
+          <div style="padding:6px 10px;background:#f8fafc">
+            <div style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Bench · 3</div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #e2e8f0">
+              <span style="color:#0A0F1E;font-weight:500">9 · Mia</span><span style="color:#f59e0b">⏱ 12m</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:4px 0">
+              <span style="color:#0A0F1E;font-weight:500">3 · Jack</span><span style="color:#f59e0b">⏱ 23m</span>
+            </div>
+          </div>
+          <!-- Sub button -->
+          <div style="padding:8px;background:white;border-top:1px solid #e2e8f0">
+            <div style="background:#0047CC;color:white;text-align:center;padding:6px;border-radius:8px;font-size:10px;font-weight:600">⇄ Make Substitution</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Pitch view</h3>
+      <p>Players shown on a visual pitch in their positions. Tap to sub. More spatial context but smaller tap targets.</p>
+      <div style="display:flex;justify-content:center;margin-top:12px">
+        <div style="width:200px;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;font-size:11px">
+          <!-- Timer bar -->
+          <div style="background:#0A0F1E;color:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;opacity:0.7">1ST HALF</span>
+            <span style="font-size:18px;font-weight:700;letter-spacing:1px">23:41</span>
+            <span style="background:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px">▶</span>
+          </div>
+          <!-- Score -->
+          <div style="background:#1e293b;color:white;padding:4px;text-align:center;font-size:12px;font-weight:600">
+            Our Team 1 — 0 Opponent
+          </div>
+          <!-- Pitch -->
+          <div style="background:#16a34a;padding:8px;position:relative;min-height:160px">
+            <!-- Field markings -->
+            <div style="border:1px solid rgba(255,255,255,0.3);border-radius:4px;height:150px;position:relative;display:flex;flex-direction:column;justify-content:space-around">
+              <div style="border-bottom:1px solid rgba(255,255,255,0.2);padding:4px;display:flex;justify-content:center">
+                <div style="background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 6px;font-size:9px;font-weight:600;color:#0A0F1E">GK · Liam</div>
+              </div>
+              <div style="padding:2px;display:flex;justify-content:space-around">
+                <div style="background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 5px;font-size:9px;font-weight:600;color:#0A0F1E">CB · Emma</div>
+                <div style="background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 5px;font-size:9px;font-weight:600;color:#0A0F1E">CB · Tom</div>
+              </div>
+              <div style="padding:2px;display:flex;justify-content:space-around">
+                <div style="background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 5px;font-size:9px;font-weight:600;color:#0A0F1E">LM · Noah</div>
+                <div style="background:rgba(255,255,255,0.9);border-radius:10px;padding:2px 5px;font-size:9px;font-weight:600;color:#0A0F1E">RM · Ava</div>
+              </div>
+              <div style="border-top:1px solid rgba(255,255,255,0.2);padding:4px;display:flex;justify-content:center">
+                <div style="background:#fbbf24;border-radius:10px;padding:2px 6px;font-size:9px;font-weight:600;color:#0A0F1E">ST · Mia ⚽</div>
+              </div>
+            </div>
+          </div>
+          <!-- Bench strip -->
+          <div style="padding:6px 8px;background:#f1f5f9;display:flex;gap:4px;overflow:hidden">
+            <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:3px 5px;font-size:9px;text-align:center">
+              <div style="font-weight:600">Jack</div>
+              <div style="color:#f59e0b">⏱23m</div>
+            </div>
+            <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:3px 5px;font-size:9px;text-align:center">
+              <div style="font-weight:600">Sara</div>
+              <div style="color:#f59e0b">⏱18m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Cards + quick-sub</h3>
+      <p>Large player cards in two rows. Playing cards show position + time; bench cards show wait time. Tap a bench card to instantly trigger substitution.</p>
+      <div style="display:flex;justify-content:center;margin-top:12px">
+        <div style="width:200px;background:#f8fafc;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;font-size:11px">
+          <!-- Timer bar -->
+          <div style="background:#0A0F1E;color:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;opacity:0.7">1ST HALF</span>
+            <span style="font-size:18px;font-weight:700;letter-spacing:1px">23:41</span>
+            <span style="background:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px">▶</span>
+          </div>
+          <!-- Score -->
+          <div style="background:#1e293b;color:white;padding:4px;text-align:center;font-size:12px;font-weight:600">
+            Our Team 1 — 0 Opponent
+          </div>
+          <!-- Playing cards -->
+          <div style="padding:6px 8px">
+            <div style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Playing</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;margin-bottom:8px">
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:4px;text-align:center">
+                <div style="font-weight:700;color:#0A0F1E">Liam</div>
+                <div style="color:#64748b;font-size:9px">GK</div>
+                <div style="color:#22c55e;font-size:9px">23m</div>
+              </div>
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:4px;text-align:center">
+                <div style="font-weight:700;color:#0A0F1E">Emma</div>
+                <div style="color:#64748b;font-size:9px">CB</div>
+                <div style="color:#22c55e;font-size:9px">23m</div>
+              </div>
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:4px;text-align:center">
+                <div style="font-weight:700;color:#0A0F1E">Noah</div>
+                <div style="color:#64748b;font-size:9px">LW</div>
+                <div style="color:#22c55e;font-size:9px">23m</div>
+              </div>
+            </div>
+            <!-- Bench cards -->
+            <div style="font-size:9px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Bench — tap to bring on</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px">
+              <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:4px;text-align:center">
+                <div style="font-weight:700;color:#0A0F1E">Mia</div>
+                <div style="color:#f59e0b;font-size:9px">⏱ 12m</div>
+              </div>
+              <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:4px;text-align:center">
+                <div style="font-weight:700;color:#0A0F1E">Jack</div>
+                <div style="color:#f59e0b;font-size:9px">⏱ 23m</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

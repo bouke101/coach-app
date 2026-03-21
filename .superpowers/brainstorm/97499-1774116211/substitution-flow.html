@@ -1,0 +1,143 @@
+<h2>Substitution Flow</h2>
+<p class="subtitle">Coach needs this done in under 5 seconds. Which interaction feels fastest?</p>
+
+<div class="options">
+
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Tap bench player → pick who comes off</h3>
+      <p>You tap a waiting bench player. The pitch highlights — tap who goes off. Done.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;font-size:10px">
+        <!-- Step 1 -->
+        <div style="width:100px">
+          <div style="text-align:center;color:#64748b;margin-bottom:4px;font-size:9px">① Tap bench</div>
+          <div style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden">
+            <div style="background:#16a34a;padding:4px;min-height:70px;position:relative">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding:2px">
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">GK · Liam</div>
+                <div style="display:flex;gap:3px">
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Emma</div>
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Tom</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">ST · Noah</div>
+              </div>
+            </div>
+            <div style="background:#f1f5f9;padding:4px;display:flex;justify-content:center">
+              <div style="background:#0047CC;color:white;border-radius:6px;padding:2px 6px;font-size:9px;font-weight:700;box-shadow:0 0 0 2px #93c5fd">Mia ⏱12m</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;font-size:14px">→</div>
+        <!-- Step 2 -->
+        <div style="width:100px">
+          <div style="text-align:center;color:#64748b;margin-bottom:4px;font-size:9px">② Tap who's off</div>
+          <div style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden">
+            <div style="background:#16a34a;padding:4px;min-height:70px;position:relative">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding:2px">
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">GK · Liam</div>
+                <div style="display:flex;gap:3px">
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Emma</div>
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Tom</div>
+                </div>
+                <div style="background:#ef4444;color:white;border-radius:8px;padding:2px 5px;font-size:8px;font-weight:700;animation:pulse 1s infinite">ST · Noah ✕</div>
+              </div>
+            </div>
+            <div style="background:#f1f5f9;padding:4px;display:flex;justify-content:center">
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:2px 6px;font-size:9px;color:#64748b">Mia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Tap pitch player → pick who comes on</h3>
+      <p>You tap a player on the pitch. The bench appears — pick the replacement. Position stays the same.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;font-size:10px">
+        <!-- Step 1 -->
+        <div style="width:100px">
+          <div style="text-align:center;color:#64748b;margin-bottom:4px;font-size:9px">① Tap player</div>
+          <div style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden">
+            <div style="background:#16a34a;padding:4px;min-height:70px">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding:2px">
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">GK · Liam</div>
+                <div style="display:flex;gap:3px">
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Emma</div>
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Tom</div>
+                </div>
+                <div style="background:#fbbf24;border-radius:8px;padding:2px 5px;font-size:8px;font-weight:700;box-shadow:0 0 0 2px white">ST · Noah ★</div>
+              </div>
+            </div>
+            <div style="background:#f1f5f9;padding:4px;display:flex;justify-content:center;gap:3px">
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;font-size:9px">Mia</div>
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;font-size:9px">Jack</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;color:#94a3b8;font-size:14px">→</div>
+        <!-- Step 2 -->
+        <div style="width:100px">
+          <div style="text-align:center;color:#64748b;margin-bottom:4px;font-size:9px">② Pick from bench</div>
+          <div style="background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden">
+            <div style="background:#16a34a;padding:4px;min-height:70px">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding:2px">
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">GK · Liam</div>
+                <div style="display:flex;gap:3px">
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Emma</div>
+                  <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Tom</div>
+                </div>
+                <div style="background:#22c55e;color:white;border-radius:8px;padding:2px 5px;font-size:8px;font-weight:700">ST · Mia ✓</div>
+              </div>
+            </div>
+            <div style="background:#f1f5f9;padding:4px;display:flex;justify-content:center;gap:3px">
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;font-size:9px;color:#64748b">Noah</div>
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;font-size:9px">Jack</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Dedicated "Sub" button → sheet</h3>
+      <p>A big "⇄ Sub" button opens a bottom sheet. Pick player off (left) and player on (right). Confirm. Explicit and hard to do accidentally.</p>
+      <div style="display:flex;justify-content:center;margin-top:12px;font-size:10px">
+        <div style="width:200px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden">
+          <div style="background:#16a34a;padding:6px;min-height:80px;position:relative;opacity:0.5">
+            <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding:2px">
+              <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">GK · Liam</div>
+              <div style="display:flex;gap:3px">
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Emma</div>
+                <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 4px;font-size:8px;font-weight:600">CB · Tom</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:2px 5px;font-size:8px;font-weight:600">ST · Noah</div>
+            </div>
+          </div>
+          <!-- Bottom sheet -->
+          <div style="background:white;border-top:2px solid #0047CC;padding:8px">
+            <div style="text-align:center;font-weight:700;color:#0A0F1E;margin-bottom:8px;font-size:11px">⇄ Substitution</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+              <div>
+                <div style="font-size:9px;color:#ef4444;font-weight:700;margin-bottom:3px">COMES OFF</div>
+                <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:3px;font-size:9px;text-align:center">Noah (ST)</div>
+              </div>
+              <div>
+                <div style="font-size:9px;color:#22c55e;font-weight:700;margin-bottom:3px">COMES ON</div>
+                <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:3px;font-size:9px;text-align:center">Mia (ST)</div>
+              </div>
+            </div>
+            <div style="background:#0047CC;color:white;text-align:center;padding:5px;border-radius:6px;font-weight:600;font-size:10px">Confirm Sub</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
