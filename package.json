@@ -20,6 +20,7 @@
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
+    "@expo/vector-icons": "^15.1.1",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.2.2",
