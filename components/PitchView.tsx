@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { View, Text } from 'react-native'
 import type { PositionSlot } from '@/lib/formations'
 import type { Player } from '@/lib/db/players'
@@ -14,9 +15,13 @@ interface PitchViewProps {
 
 const SLOT_SIZE = 52
 
-export function PitchView({ slots, assignments, onSlotLayout }: PitchViewProps) {
+export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
+  { slots, assignments, onSlotLayout },
+  ref,
+) {
   return (
     <View
+      ref={ref}
       className="mx-4 rounded-2xl overflow-hidden"
       style={{ backgroundColor: '#16a34a', aspectRatio: 0.65 }}
     >
@@ -89,4 +94,4 @@ export function PitchView({ slots, assignments, onSlotLayout }: PitchViewProps) 
       })}
     </View>
   )
-}
+})

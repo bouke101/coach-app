@@ -39,12 +39,15 @@ export default function MatchFormationScreen() {
   // Slot layouts for hit testing (populated by PitchView onSlotLayout)
   const slotLayouts = useRef<Map<string, SlotLayout>>(new Map())
 
-  // Pitch container absolute offset
+  // Pitch green view ref and absolute offset for hit testing
   const pitchRef = useRef<View>(null)
   const pitchOffset = useRef({ x: 0, y: 0 })
 
   useFocusEffect(useCallback(() => {
-    getPlayers().then((data) => { setPlayers(data); setLoading(false) })
+    getPlayers()
+      .then((data) => { setPlayers(data) })
+      .catch(() => Alert.alert('Error', 'Could not load players.'))
+      .finally(() => setLoading(false))
   }, []))
 
   const slots = getSlots(gameType, formation)
@@ -77,6 +80,10 @@ export default function MatchFormationScreen() {
   function handleDragStart({ playerId, startX, startY }: { playerId: string; startX: number; startY: number }) {
     const player = players.find((p) => p.id === playerId)
     if (!player) return
+    // Refresh pitch position in case user has scrolled
+    pitchRef.current?.measureInWindow((x, y) => {
+      pitchOffset.current = { x, y }
+    })
     // Remove from any existing slot assignment
     setAssignments((a) => {
       const updated = { ...a }
@@ -126,7 +133,6 @@ export default function MatchFormationScreen() {
     top: dragY.value - 26,
     opacity: dragOpacity.value,
     zIndex: 999,
-    pointerEvents: 'none' as any,
   }))
 
   const assignedIds = new Set(Object.values(assignments).map((p) => p.id))
@@ -196,7 +202,6 @@ export default function MatchFormationScreen() {
 
           {/* Pitch */}
           <View
-            ref={pitchRef}
             className="mb-4"
             onLayout={() => {
               pitchRef.current?.measureInWindow((x, y) => {
@@ -205,6 +210,7 @@ export default function MatchFormationScreen() {
             }}
           >
             <PitchView
+              ref={pitchRef}
               slots={slots}
               assignments={assignments}
               onSlotLayout={(slotId, layout) => {
@@ -233,7 +239,7 @@ export default function MatchFormationScreen() {
 
         {/* Floating drag card */}
         {dragPlayer && (
-          <Animated.View style={floatingStyle}>
+          <Animated.View style={floatingStyle} pointerEvents="none">
             <View
               className="rounded-full bg-blue-600 items-center justify-center shadow-lg"
               style={{ width: 52, height: 52 }}

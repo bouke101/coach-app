@@ -1,4 +1,4 @@
-import { setupDatabase, resetDb } from '../db/database'
+import { setupDatabase, resetDb, getDb } from '../db/database'
 import { createMatch, getMatches, getMatchById } from '../db/matches'
 
 beforeEach(async () => {
@@ -23,6 +23,31 @@ describe('createMatch', () => {
     expect(match.opponent).toBe('FC Riviera')
     expect(match.status).toBe('in_progress')
     expect(match.created_at).toBeTruthy()
+  })
+
+  it('saves starters and bench players to match_players', async () => {
+    const db = await getDb()
+    const playerId = 'test-player-1'
+    const created_at = new Date().toISOString()
+    await db.runAsync(
+      'INSERT INTO players (id, name, number, created_at) VALUES (?, ?, ?, ?)',
+      [playerId, 'Test Player', 7, created_at]
+    )
+
+    const match = await createMatch({
+      ...sampleMatch,
+      starters: [{ player_id: playerId, position: 'ST' }],
+      bench: [],
+    })
+
+    const matchPlayers = await db.getAllAsync<{ player_id: string; role: string; position: string }>(
+      'SELECT player_id, role, position FROM match_players WHERE match_id = ?',
+      [match.id]
+    )
+    expect(matchPlayers).toHaveLength(1)
+    expect(matchPlayers[0].player_id).toBe(playerId)
+    expect(matchPlayers[0].role).toBe('starter')
+    expect(matchPlayers[0].position).toBe('ST')
   })
 })
 
