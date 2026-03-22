@@ -45,3 +45,11 @@ jest.mock('expo-sqlite', () => {
     }
   }
 })
+
+// Mock expo-crypto to use Node's built-in crypto
+jest.mock('expo-crypto', () => {
+  const crypto = require('crypto')
+  return {
+    randomUUID: () => crypto.randomUUID()
+  }
+})
