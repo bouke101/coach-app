@@ -9,7 +9,25 @@ const MIGRATIONS: string[] = [
     number     INTEGER,
     created_at TEXT NOT NULL
   );`,
-  // Sub-project 2 will append migration 2 here.
+  // Migration 2 — Sub-project 2: matches and match_players
+  `CREATE TABLE IF NOT EXISTS matches (
+    id            TEXT PRIMARY KEY,
+    opponent      TEXT NOT NULL,
+    venue         TEXT NOT NULL CHECK(venue IN ('home', 'away')),
+    game_type     TEXT NOT NULL CHECK(game_type IN ('6v6', '8v8', '11v11')),
+    half_duration INTEGER NOT NULL,
+    formation     TEXT NOT NULL,
+    status        TEXT NOT NULL CHECK(status IN ('in_progress', 'finished')),
+    created_at    TEXT NOT NULL
+  );
+  CREATE TABLE IF NOT EXISTS match_players (
+    id         TEXT PRIMARY KEY,
+    match_id   TEXT NOT NULL REFERENCES matches(id),
+    player_id  TEXT NOT NULL REFERENCES players(id),
+    role       TEXT NOT NULL CHECK(role IN ('starter', 'bench')),
+    position   TEXT,
+    created_at TEXT NOT NULL
+  );`,
 ]
 
 let _db: SQLite.SQLiteDatabase | null = null
