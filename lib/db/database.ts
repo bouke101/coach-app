@@ -49,3 +49,8 @@ export async function setupDatabase(): Promise<void> {
     await db.execAsync(`PRAGMA user_version = ${i + 1}`)
   }
 }
+
+// For testing only
+export function resetDb(): void {
+  _db = null
+}

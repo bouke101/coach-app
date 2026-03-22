@@ -1,7 +1,10 @@
-import { setupDatabase, getDb } from '../db/database'
+import { setupDatabase, getDb, resetDb } from '../db/database'
 
 // expo-sqlite in Jest (Node preset) uses an in-memory SQLite
 describe('migrations', () => {
+  beforeEach(() => {
+    resetDb()
+  })
   it('creates players, matches, and match_players tables', async () => {
     await setupDatabase()
     const db = await getDb()

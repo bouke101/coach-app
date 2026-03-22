@@ -2,37 +2,46 @@
 jest.mock('expo-sqlite', () => {
   const BetterSQLite3 = require('better-sqlite3')
 
+  class SQLiteDatabase {
+    constructor(name) {
+      this.db = new BetterSQLite3(':memory:')
+    }
+
+    async execAsync(sql) {
+      this.db.exec(sql)
+    }
+
+    async getFirstAsync(sql, params) {
+      const stmt = this.db.prepare(sql)
+      return stmt.get(params ?? []) ?? null
+    }
+
+    async getAllAsync(sql, params) {
+      const stmt = this.db.prepare(sql)
+      return stmt.all(params ?? [])
+    }
+
+    async runAsync(sql, params) {
+      const stmt = this.db.prepare(sql)
+      return Array.isArray(params) ? stmt.run(...params) : stmt.run(params ?? [])
+    }
+
+    async withTransactionAsync(task) {
+      this.db.exec('BEGIN')
+      try {
+        await task()
+        this.db.exec('COMMIT')
+      } catch (e) {
+        this.db.exec('ROLLBACK')
+        throw e
+      }
+    }
+  }
+
   return {
-    SQLiteDatabase: class {
-      constructor(name) {
-        this.db = new BetterSQLite3(':memory:')
-      }
-
-      async execAsync(sql) {
-        // Split multiple statements by semicolon and execute each
-        const statements = sql.split(';').filter(s => s.trim())
-        for (const stmt of statements) {
-          this.db.exec(stmt)
-        }
-      }
-
-      async getFirstAsync(sql) {
-        const stmt = this.db.prepare(sql)
-        return stmt.get()
-      }
-
-      async getAllAsync(sql) {
-        const stmt = this.db.prepare(sql)
-        return stmt.all()
-      }
-
-      async runAsync(sql, params) {
-        const stmt = this.db.prepare(sql)
-        return stmt.run(...(params || []))
-      }
-    },
+    SQLiteDatabase,
     openDatabaseAsync: async function(name) {
-      return new this.SQLiteDatabase(name)
+      return new SQLiteDatabase(name)
     }
   }
 })
