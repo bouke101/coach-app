@@ -4,3 +4,4 @@ dist/
 *.orig.*
 .DS_Store
 *.tsbuildinfo
+.superpowers/
