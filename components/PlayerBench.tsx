@@ -18,12 +18,13 @@ interface PlayerBenchProps {
   dragY: SharedValue<number>
   onToggleAbsent: (playerId: string) => void
   onDragStart: (payload: DragStartPayload) => void
+  onDragHover: (x: number, y: number) => void
   onDragEnd: (x: number, y: number) => void
 }
 
 export function PlayerBench({
   players, absentIds, assignedIds, dragX, dragY,
-  onToggleAbsent, onDragStart, onDragEnd,
+  onToggleAbsent, onDragStart, onDragHover, onDragEnd,
 }: PlayerBenchProps) {
   // Bench = players not assigned to pitch (absent ones stay visible so coach can un-absent them)
   const benchPlayers = players.filter((p) => !assignedIds.has(p.id))
@@ -43,10 +44,12 @@ export function PlayerBench({
               runOnJS(onDragStart)({ playerId: player.id, startX: e.absoluteX, startY: e.absoluteY })
             })
             .onUpdate((e) => {
-              // Runs on UI thread — sets shared values directly, no JS bridge round-trip
               if (absent) return
+              // Set position on UI thread — no JS bridge round-trip
               dragX.value = e.absoluteX
               dragY.value = e.absoluteY
+              // Hover detection runs on JS thread (async, doesn't block animation)
+              runOnJS(onDragHover)(e.absoluteX, e.absoluteY)
             })
             .onEnd((e) => {
               if (absent) return

@@ -9,7 +9,7 @@ export default function LiveMatchScreen() {
         Match timers, substitutions and goals are coming in the next update.
       </Text>
       <TouchableOpacity
-        onPress={() => router.back()}
+        onPress={() => router.dismiss(1)}
         className="bg-slate-200 px-6 py-3 rounded-xl w-full items-center"
       >
         <Text className="text-slate-700 font-semibold text-base">← Back to Formation</Text>

@@ -10,13 +10,14 @@ export interface SlotLayout {
 interface PitchViewProps {
   slots: PositionSlot[]
   assignments: Record<string, Player>   // slotId → player
+  hoveredSlotId: string | null
   onSlotLayout: (slotId: string, layout: SlotLayout) => void
 }
 
 const SLOT_SIZE = 52
 
 export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
-  { slots, assignments, onSlotLayout },
+  { slots, assignments, hoveredSlotId, onSlotLayout },
   ref,
 ) {
   return (
@@ -45,10 +46,13 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
         }}
       />
 
-      {/* Position slots — rendered using percentage positions */}
+      {/* Position slots */}
       {slots.map((slot) => {
         const player = assignments[slot.id]
         const isGK = slot.position === 'GK'
+        const hovered = hoveredSlotId === slot.id
+        const slotSize = hovered ? SLOT_SIZE + 10 : SLOT_SIZE
+        const offset = hovered ? -(slotSize / 2) : -(SLOT_SIZE / 2)
 
         return (
           <View
@@ -57,10 +61,10 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
               position: 'absolute',
               left: `${slot.x * 100}%`,
               top: `${slot.y * 100}%`,
-              width: SLOT_SIZE,
-              height: SLOT_SIZE,
-              marginLeft: -SLOT_SIZE / 2,
-              marginTop: -SLOT_SIZE / 2,
+              width: slotSize,
+              height: slotSize,
+              marginLeft: offset,
+              marginTop: offset,
             }}
             onLayout={(e) => {
               const { x, y, width, height } = e.nativeEvent.layout
@@ -70,7 +74,11 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
             {player ? (
               <View
                 className="w-full h-full rounded-full items-center justify-center"
-                style={{ backgroundColor: isGK ? '#fbbf24' : 'white' }}
+                style={{
+                  backgroundColor: isGK ? '#fbbf24' : 'white',
+                  borderWidth: hovered ? 3 : 0,
+                  borderColor: hovered ? '#60a5fa' : 'transparent',
+                }}
               >
                 <Text
                   style={{ fontSize: 10, fontWeight: '700', color: isGK ? 'white' : '#15803d', textAlign: 'center', lineHeight: 12 }}
@@ -82,9 +90,14 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
             ) : (
               <View
                 className="w-full h-full rounded-full items-center justify-center"
-                style={{ borderWidth: 2, borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.6)' }}
+                style={{
+                  borderWidth: 2,
+                  borderStyle: hovered ? 'solid' : 'dashed',
+                  borderColor: hovered ? 'white' : 'rgba(255,255,255,0.6)',
+                  backgroundColor: hovered ? 'rgba(255,255,255,0.25)' : 'transparent',
+                }}
               >
-                <Text style={{ fontSize: 10, color: 'rgba(255,255,255,0.8)', fontWeight: '600' }}>
+                <Text style={{ fontSize: 10, color: hovered ? 'white' : 'rgba(255,255,255,0.8)', fontWeight: hovered ? '800' : '600' }}>
                   {slot.position}
                 </Text>
               </View>

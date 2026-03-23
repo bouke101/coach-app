@@ -31,6 +31,7 @@ export default function MatchFormationScreen() {
 
   // Drag state
   const [dragPlayer, setDragPlayer] = useState<Player | null>(null)
+  const [hoveredSlotId, setHoveredSlotId] = useState<string | null>(null)
   const dragX = useSharedValue(0)
   const dragY = useSharedValue(0)
   const dragOpacity = useSharedValue(0)
@@ -41,6 +42,10 @@ export default function MatchFormationScreen() {
   // Pitch view ref and absolute offset for hit testing
   const pitchRef = useRef<View>(null)
   const pitchOffset = useRef({ x: 0, y: 0 })
+
+  // Container ref to measure header offset for floating drag card positioning
+  const containerRef = useRef<View>(null)
+  const containerOffsetY = useSharedValue(0)
 
   useFocusEffect(useCallback(() => {
     getPlayers()
@@ -97,6 +102,19 @@ export default function MatchFormationScreen() {
     setDragPlayer(player)
   }
 
+  function handleDragHover(x: number, y: number) {
+    let found: string | null = null
+    for (const [slotId, layout] of slotLayouts.current.entries()) {
+      const absX = pitchOffset.current.x + layout.x
+      const absY = pitchOffset.current.y + layout.y
+      if (x >= absX && x <= absX + layout.width && y >= absY && y <= absY + layout.height) {
+        found = slotId
+        break
+      }
+    }
+    setHoveredSlotId(found)
+  }
+
   function handleDragEnd(x: number, y: number) {
     // Find which slot the finger landed on using stored layouts + pitch offset
     let targetSlotId: string | null = null
@@ -117,12 +135,13 @@ export default function MatchFormationScreen() {
     }
     dragOpacity.value = 0
     setDragPlayer(null)
+    setHoveredSlotId(null)
   }
 
   const floatingStyle = useAnimatedStyle(() => ({
     position: 'absolute',
     left: dragX.value - 26,
-    top: dragY.value - 26,
+    top: dragY.value - 26 - containerOffsetY.value,
     opacity: dragOpacity.value,
     zIndex: 999,
   }))
@@ -182,7 +201,15 @@ export default function MatchFormationScreen() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View className="flex-1 bg-slate-50">
+      <View
+        ref={containerRef}
+        className="flex-1 bg-slate-50"
+        onLayout={() => {
+          containerRef.current?.measureInWindow((_x, y) => {
+            containerOffsetY.value = y
+          })
+        }}
+      >
         <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 120 }}>
           {/* Formation picker */}
           <View className="pt-4 pb-3">
@@ -206,6 +233,7 @@ export default function MatchFormationScreen() {
               ref={pitchRef}
               slots={slots}
               assignments={assignments}
+              hoveredSlotId={hoveredSlotId}
               onSlotLayout={(slotId, layout) => {
                 slotLayouts.current.set(slotId, layout)
               }}
@@ -221,6 +249,7 @@ export default function MatchFormationScreen() {
             dragY={dragY}
             onToggleAbsent={handleToggleAbsent}
             onDragStart={handleDragStart}
+            onDragHover={handleDragHover}
             onDragEnd={handleDragEnd}
           />
 
