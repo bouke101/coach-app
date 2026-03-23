@@ -96,6 +96,7 @@ export default function LiveMatchScreen() {
             setHalf('halftime')
             void createMatchEvent({ match_id: match.id, type: 'half_time', match_time: next, player_id: null, player_off_id: null, position: null, team: null })
               .then(e => setEvents(prev => [...prev, e]))
+              .catch(console.error)
           }
           // For half === 2: DO NOT set half to 'finished'. Timer pauses and
           // MatchHeader shows "End Match" button (visible when half===2 && elapsed>=halfDurationSecs).
@@ -229,6 +230,7 @@ export default function LiveMatchScreen() {
         player_id: aId, player_off_id: bId, position: posB,
         team: null,
       }).then(e => setEvents(prev => [...prev, e]))
+        .catch(console.error)
     } else {
       // Substitution — determine who's on pitch and who's on bench
       const pitchId = aOnPitch ? aId : bId
@@ -241,6 +243,7 @@ export default function LiveMatchScreen() {
         match_id: match.id, type: 'substitution', match_time: elapsed,
         player_id: benchId, player_off_id: pitchId, position: pos, team: null,
       }).then(e => setEvents(prev => [...prev, e]))
+        .catch(console.error)
     }
   }
 
