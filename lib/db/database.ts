@@ -28,6 +28,11 @@ const MIGRATIONS: string[] = [
     position   TEXT,
     created_at TEXT NOT NULL
   );`,
+  // Migration 3 — Sub-project 3: settings key-value store (team name etc.)
+  `CREATE TABLE IF NOT EXISTS settings (
+    key   TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+  );`,
 ]
 
 let _db: SQLite.SQLiteDatabase | null = null

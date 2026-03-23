@@ -49,7 +49,7 @@ function row(positions: string[], y: number): SlotDef[] {
   return positions.map((position, i) => ({
     id: `${position.toLowerCase()}-${i}`,
     position,
-    x: n === 1 ? 0.5 : i / (n - 1),
+    x: n === 1 ? 0.5 : 0.1 + (i / (n - 1)) * 0.8,
     y,
   }))
 }

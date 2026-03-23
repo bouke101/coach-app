@@ -30,7 +30,6 @@ export default function MatchFormationScreen() {
   const [assignments, setAssignments] = useState<Record<string, Player>>({})
 
   // Drag state
-  const [dragging, setDragging] = useState(false)
   const [dragPlayer, setDragPlayer] = useState<Player | null>(null)
   const dragX = useSharedValue(0)
   const dragY = useSharedValue(0)
@@ -39,7 +38,7 @@ export default function MatchFormationScreen() {
   // Slot layouts for hit testing (populated by PitchView onSlotLayout)
   const slotLayouts = useRef<Map<string, SlotLayout>>(new Map())
 
-  // Pitch green view ref and absolute offset for hit testing
+  // Pitch view ref and absolute offset for hit testing
   const pitchRef = useRef<View>(null)
   const pitchOffset = useRef({ x: 0, y: 0 })
 
@@ -96,12 +95,6 @@ export default function MatchFormationScreen() {
     dragY.value = startY
     dragOpacity.value = 1
     setDragPlayer(player)
-    setDragging(true)
-  }
-
-  function handleDragMove(x: number, y: number) {
-    dragX.value = x
-    dragY.value = y
   }
 
   function handleDragEnd(x: number, y: number) {
@@ -123,7 +116,6 @@ export default function MatchFormationScreen() {
       setAssignments((a) => ({ ...a, [targetSlotId!]: player }))
     }
     dragOpacity.value = 0
-    setDragging(false)
     setDragPlayer(null)
   }
 
@@ -158,7 +150,8 @@ export default function MatchFormationScreen() {
         starters,
         bench,
       })
-      router.replace({ pathname: '/live-match', params: { id: match.id } })
+      // Use push (not replace) so formation screen stays in stack — coach can go back to adjust
+      router.push({ pathname: '/live-match', params: { id: match.id } })
     } catch (e) {
       Alert.alert('Error', 'Could not save match. Please try again.')
     } finally {
@@ -180,7 +173,7 @@ export default function MatchFormationScreen() {
         <Text className="text-base text-slate-500 text-center">
           No players in your squad. Add players first.
         </Text>
-        <TouchableOpacity onPress={() => router.dismiss(2)} className="mt-4">
+        <TouchableOpacity onPress={() => router.dismissAll()} className="mt-4">
           <Text className="text-blue-600 font-semibold">Cancel</Text>
         </TouchableOpacity>
       </View>
@@ -224,9 +217,10 @@ export default function MatchFormationScreen() {
             players={players}
             absentIds={absentIds}
             assignedIds={assignedIds}
+            dragX={dragX}
+            dragY={dragY}
             onToggleAbsent={handleToggleAbsent}
             onDragStart={handleDragStart}
-            onDragMove={handleDragMove}
             onDragEnd={handleDragEnd}
           />
 
@@ -259,7 +253,7 @@ export default function MatchFormationScreen() {
         <View className="absolute bottom-0 left-0 right-0 px-4 pb-8 pt-3 bg-slate-50 border-t border-slate-200">
           <View className="flex-row gap-3">
             <TouchableOpacity
-              onPress={() => router.dismiss(2)}
+              onPress={() => router.dismissAll()}
               className="flex-1 py-4 rounded-xl border border-slate-300 items-center"
             >
               <Text className="text-slate-600 font-semibold text-base">Cancel</Text>

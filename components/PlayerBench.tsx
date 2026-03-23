@@ -1,5 +1,7 @@
-import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
+import { runOnJS } from 'react-native-reanimated'
+import type { SharedValue } from 'react-native-reanimated'
 import type { Player } from '@/lib/db/players'
 
 export interface DragStartPayload {
@@ -12,41 +14,43 @@ interface PlayerBenchProps {
   players: Player[]
   absentIds: Set<string>
   assignedIds: Set<string>
+  dragX: SharedValue<number>
+  dragY: SharedValue<number>
   onToggleAbsent: (playerId: string) => void
   onDragStart: (payload: DragStartPayload) => void
-  onDragMove: (x: number, y: number) => void
   onDragEnd: (x: number, y: number) => void
 }
 
-export function PlayerBench({ players, absentIds, assignedIds, onToggleAbsent, onDragStart, onDragMove, onDragEnd }: PlayerBenchProps) {
+export function PlayerBench({
+  players, absentIds, assignedIds, dragX, dragY,
+  onToggleAbsent, onDragStart, onDragEnd,
+}: PlayerBenchProps) {
+  // Bench = players not assigned to pitch (absent ones stay visible so coach can un-absent them)
+  const benchPlayers = players.filter((p) => !assignedIds.has(p.id))
+
   return (
-    <View>
-      <Text className="text-xs font-semibold text-slate-500 uppercase tracking-wide px-4 mb-2">
+    <View className="px-4">
+      <Text className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
         Players — tap to mark absent · drag to place on pitch
       </Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
-        className="pb-2"
-      >
-        {players.map((player) => {
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {benchPlayers.map((player) => {
           const absent = absentIds.has(player.id)
-          const onPitch = assignedIds.has(player.id)
 
           const panGesture = Gesture.Pan()
-            .runOnJS(true)
             .onStart((e) => {
               if (absent) return
-              onDragStart({ playerId: player.id, startX: e.absoluteX, startY: e.absoluteY })
+              runOnJS(onDragStart)({ playerId: player.id, startX: e.absoluteX, startY: e.absoluteY })
             })
             .onUpdate((e) => {
+              // Runs on UI thread — sets shared values directly, no JS bridge round-trip
               if (absent) return
-              onDragMove(e.absoluteX, e.absoluteY)
+              dragX.value = e.absoluteX
+              dragY.value = e.absoluteY
             })
             .onEnd((e) => {
               if (absent) return
-              onDragEnd(e.absoluteX, e.absoluteY)
+              runOnJS(onDragEnd)(e.absoluteX, e.absoluteY)
             })
 
           return (
@@ -57,18 +61,16 @@ export function PlayerBench({ players, absentIds, assignedIds, onToggleAbsent, o
                 className={`items-center px-3 py-2 rounded-xl border ${
                   absent
                     ? 'bg-slate-100 border-slate-200 opacity-40'
-                    : onPitch
-                    ? 'bg-green-50 border-green-300'
                     : 'bg-white border-slate-200'
                 }`}
                 style={{ minWidth: 60 }}
               >
                 <View
                   className={`w-8 h-8 rounded-full items-center justify-center mb-1 ${
-                    absent ? 'bg-slate-300' : onPitch ? 'bg-green-500' : 'bg-blue-100'
+                    absent ? 'bg-slate-300' : 'bg-blue-100'
                   }`}
                 >
-                  <Text className={`text-xs font-bold ${absent ? 'text-slate-500' : onPitch ? 'text-white' : 'text-blue-700'}`}>
+                  <Text className={`text-xs font-bold ${absent ? 'text-slate-500' : 'text-blue-700'}`}>
                     {player.number ?? '?'}
                   </Text>
                 </View>
@@ -86,7 +88,7 @@ export function PlayerBench({ players, absentIds, assignedIds, onToggleAbsent, o
             </GestureDetector>
           )
         })}
-      </ScrollView>
+      </View>
     </View>
   )
 }
