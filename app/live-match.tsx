@@ -232,6 +232,11 @@ export default function LiveMatchScreen() {
       }).then(e => setEvents(prev => [...prev, e]))
         .catch(console.error)
     } else {
+      // Both on bench — invalid selection, deselect
+      if (!aOnPitch && !bOnPitch) {
+        setSelectedPlayerId(null)
+        return
+      }
       // Substitution — determine who's on pitch and who's on bench
       const pitchId = aOnPitch ? aId : bId
       const benchId = aOnPitch ? bId : aId
