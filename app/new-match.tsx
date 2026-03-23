@@ -12,6 +12,7 @@ export default function NewMatchScreen() {
   const [venue, setVenue] = useState<Venue>('home')
   const [gameType, setGameType] = useState<GameType>('8v8')
   const [halfDuration, setHalfDuration] = useState(25)
+  const [timerDirection, setTimerDirection] = useState<'up' | 'down'>('up')
   const [opponentError, setOpponentError] = useState('')
 
   function handleNext() {
@@ -22,7 +23,7 @@ export default function NewMatchScreen() {
     setOpponentError('')
     router.push({
       pathname: '/match-formation',
-      params: { opponent: opponent.trim(), venue, game_type: gameType, half_duration: String(halfDuration) },
+      params: { opponent: opponent.trim(), venue, game_type: gameType, half_duration: String(halfDuration), timer_direction: timerDirection },
     })
   }
 
@@ -104,6 +105,24 @@ export default function NewMatchScreen() {
           >
             <Text className="text-2xl text-slate-600 font-light">+</Text>
           </TouchableOpacity>
+        </View>
+
+        {/* Timer Direction */}
+        <Text className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Timer Direction</Text>
+        <View className="flex-row gap-3 mb-8">
+          {(['up', 'down'] as const).map((d) => (
+            <TouchableOpacity
+              key={d}
+              onPress={() => setTimerDirection(d)}
+              className={`flex-1 py-3 rounded-xl border items-center ${
+                timerDirection === d ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-200'
+              }`}
+            >
+              <Text className={`font-semibold text-base ${timerDirection === d ? 'text-white' : 'text-slate-600'}`}>
+                {d === 'up' ? '⬆ Count Up' : '⬇ Count Down'}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {/* Next button */}

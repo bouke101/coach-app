@@ -15,7 +15,7 @@ import { PlayerBench } from '@/components/PlayerBench'
 
 export default function MatchFormationScreen() {
   const params = useLocalSearchParams<{
-    opponent: string; venue: string; game_type: string; half_duration: string
+    opponent: string; venue: string; game_type: string; half_duration: string; timer_direction: string
   }>()
 
   const gameType = (params.game_type ?? '8v8') as GameType
@@ -166,6 +166,7 @@ export default function MatchFormationScreen() {
         game_type: gameType,
         half_duration: parseInt(params.half_duration ?? '25', 10),
         formation,
+        timer_direction: (params.timer_direction ?? 'up') as 'up' | 'down',
         starters,
         bench,
       })
