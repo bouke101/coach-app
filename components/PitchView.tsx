@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import type { PositionSlot } from '@/lib/formations'
 import type { Player } from '@/lib/db/players'
 
@@ -12,14 +12,17 @@ interface PitchViewProps {
   assignments: Record<string, Player>   // slotId → player
   hoveredSlotId: string | null
   onSlotLayout: (slotId: string, layout: SlotLayout) => void
+  onPlayerPress?: (playerId: string) => void
+  selectedPlayerId?: string | null
 }
 
 const SLOT_SIZE = 52
 
 export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
-  { slots, assignments, hoveredSlotId, onSlotLayout },
+  props,
   ref,
 ) {
+  const { slots, assignments, hoveredSlotId, onSlotLayout } = props
   return (
     <View
       ref={ref}
@@ -72,12 +75,14 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
             }}
           >
             {player ? (
-              <View
+              <TouchableOpacity
+                onPress={() => props.onPlayerPress?.(player.id)}
+                activeOpacity={props.onPlayerPress ? 0.7 : 1}
                 className="w-full h-full rounded-full items-center justify-center"
                 style={{
                   backgroundColor: isGK ? '#fbbf24' : 'white',
-                  borderWidth: hovered ? 3 : 0,
-                  borderColor: hovered ? '#60a5fa' : 'transparent',
+                  borderWidth: (hovered || props.selectedPlayerId === player.id) ? 3 : 0,
+                  borderColor: '#60a5fa',
                 }}
               >
                 <Text
@@ -86,7 +91,7 @@ export const PitchView = forwardRef<View, PitchViewProps>(function PitchView(
                 >
                   {player.number ?? ''}{'\n'}{player.name.split(' ')[0]}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ) : (
               <View
                 className="w-full h-full rounded-full items-center justify-center"
