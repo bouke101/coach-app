@@ -1,5 +1,23 @@
 import { setupDatabase, resetDb, getDb } from '../db/database'
-import { createMatch, getMatches, getMatchById } from '../db/matches'
+import { createMatch, getMatches, getMatchById, getMatchPlayersByMatchId, finishMatch } from '../db/matches'
+
+describe('migration 4', () => {
+  beforeEach(async () => { resetDb(); await setupDatabase() })
+
+  it('adds timer_direction column to matches', async () => {
+    const db = await getDb()
+    const rows = await db.getAllAsync<{ timer_direction: string }>(
+      "SELECT timer_direction FROM matches LIMIT 1"
+    )
+    expect(rows).toBeDefined()
+  })
+
+  it('creates match_events table', async () => {
+    const db = await getDb()
+    const rows = await db.getAllAsync("SELECT name FROM sqlite_master WHERE type='table' AND name='match_events'")
+    expect(rows).toHaveLength(1)
+  })
+})
 
 beforeEach(async () => {
   resetDb()
@@ -12,6 +30,7 @@ const sampleMatch = {
   game_type: '8v8' as const,
   half_duration: 25,
   formation: '1-3-2-2',
+  timer_direction: 'up' as const,
   starters: [] as { player_id: string; position: string }[],
   bench: [] as { player_id: string }[],
 }
@@ -78,5 +97,28 @@ describe('getMatchById', () => {
     const created = await createMatch(sampleMatch)
     const found = await getMatchById(created.id)
     expect(found?.opponent).toBe('FC Riviera')
+  })
+})
+
+describe('getMatchPlayersByMatchId', () => {
+  it('returns starters for a match', async () => {
+    const db = await getDb()
+    const playerId = 'player-mp-1'
+    await db.runAsync('INSERT INTO players (id, name, number, created_at) VALUES (?, ?, ?, ?)',
+      [playerId, 'Test', 9, new Date().toISOString()])
+    const match = await createMatch({ ...sampleMatch, starters: [{ player_id: playerId, position: 'ST' }] })
+    const mps = await getMatchPlayersByMatchId(match.id)
+    expect(mps).toHaveLength(1)
+    expect(mps[0].role).toBe('starter')
+    expect(mps[0].position).toBe('ST')
+  })
+})
+
+describe('finishMatch', () => {
+  it('sets status to finished', async () => {
+    const match = await createMatch(sampleMatch)
+    await finishMatch(match.id)
+    const updated = await getMatchById(match.id)
+    expect(updated?.status).toBe('finished')
   })
 })

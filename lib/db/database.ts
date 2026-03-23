@@ -33,6 +33,19 @@ const MIGRATIONS: string[] = [
     key   TEXT PRIMARY KEY,
     value TEXT NOT NULL
   );`,
+  // Migration 4 — Sub-project 3: timer_direction on matches + match_events table
+  `ALTER TABLE matches ADD COLUMN timer_direction TEXT NOT NULL DEFAULT 'up';
+  CREATE TABLE IF NOT EXISTS match_events (
+    id            TEXT PRIMARY KEY,
+    match_id      TEXT NOT NULL REFERENCES matches(id),
+    type          TEXT NOT NULL CHECK(type IN ('goal','substitution','position_swap','half_time','second_half_start','match_end')),
+    match_time    INTEGER NOT NULL,
+    player_id     TEXT REFERENCES players(id),
+    player_off_id TEXT REFERENCES players(id),
+    position      TEXT,
+    team          TEXT CHECK(team IN ('our_team','opponent')),
+    created_at    TEXT NOT NULL
+  );`,
 ]
 
 let _db: SQLite.SQLiteDatabase | null = null

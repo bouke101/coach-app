@@ -9,6 +9,7 @@ export interface Match {
   half_duration: number
   formation: string
   status: 'in_progress' | 'finished'
+  timer_direction: 'up' | 'down'
   created_at: string
 }
 
@@ -27,6 +28,7 @@ interface CreateMatchInput {
   game_type: '6v6' | '8v8' | '11v11'
   half_duration: number
   formation: string
+  timer_direction: 'up' | 'down'
   starters: { player_id: string; position: string }[]
   bench: { player_id: string }[]
 }
@@ -48,8 +50,8 @@ export async function createMatch(data: CreateMatchInput): Promise<Match> {
 
   await db.withTransactionAsync(async () => {
     await db.runAsync(
-      'INSERT INTO matches (id, opponent, venue, game_type, half_duration, formation, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [id, data.opponent.trim(), data.venue, data.game_type, data.half_duration, data.formation, 'in_progress', created_at]
+      'INSERT INTO matches (id, opponent, venue, game_type, half_duration, formation, status, timer_direction, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [id, data.opponent.trim(), data.venue, data.game_type, data.half_duration, data.formation, 'in_progress', data.timer_direction, created_at]
     )
     for (const s of data.starters) {
       await db.runAsync(
@@ -65,5 +67,18 @@ export async function createMatch(data: CreateMatchInput): Promise<Match> {
     }
   })
 
-  return { id, opponent: data.opponent.trim(), venue: data.venue, game_type: data.game_type, half_duration: data.half_duration, formation: data.formation, status: 'in_progress', created_at }
+  return { id, opponent: data.opponent.trim(), venue: data.venue, game_type: data.game_type, half_duration: data.half_duration, formation: data.formation, status: 'in_progress', timer_direction: data.timer_direction, created_at }
+}
+
+export async function getMatchPlayersByMatchId(matchId: string): Promise<MatchPlayer[]> {
+  const db = await getDb()
+  return db.getAllAsync<MatchPlayer>(
+    'SELECT * FROM match_players WHERE match_id = ? ORDER BY created_at ASC',
+    [matchId]
+  )
+}
+
+export async function finishMatch(matchId: string): Promise<void> {
+  const db = await getDb()
+  await db.runAsync('UPDATE matches SET status = ? WHERE id = ?', ['finished', matchId])
 }
